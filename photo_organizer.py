@@ -40,7 +40,7 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Organize your photos by year and month it was taken.')
+    parser = argparse.ArgumentParser(description='Organize your photos by year and month it was taken. It generates a folder "organized" with a copy of your photos.')
     parser.add_argument('image_folder', metavar='path', type=str, help='The image folder path')
     args = parser.parse_args()
     main(args)
