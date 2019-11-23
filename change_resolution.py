@@ -3,6 +3,7 @@ from datetime import datetime
 import shutil
 from PIL import Image
 import argparse
+from progressbar import ProgressBar
 
 
 def main(args):
@@ -22,7 +23,9 @@ def main(args):
         for file in f:            
             files.append(os.path.join(r, file))
 
-    for f in files:        
+    pb = ProgressBar(len(files))
+    for f in files:
+        pb.next()
         try:
             ex = f[f.index('.'):].lower()
             if ex not in EXTENSIONS:

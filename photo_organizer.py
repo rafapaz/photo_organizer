@@ -3,6 +3,7 @@ from datetime import datetime
 import shutil
 from PIL import Image
 import argparse
+from progressbar import ProgressBar
 
 
 def main(args):
@@ -21,8 +22,10 @@ def main(args):
         for file in f:            
             files.append(os.path.join(r, file))
 
-    for f in files:        
-        try:
+    pb = ProgressBar(len(files))
+    for f in files:
+        pb.next()
+        try:     
             ex = f[f.index('.'):].lower()
             if ex not in EXTENSIONS:
                 continue
@@ -41,7 +44,7 @@ def main(args):
         if not os.path.isdir('{}\\{}\\{}'.format(PATH_ORG, year, month)):
             os.mkdir('{}\\{}\\{}'.format(PATH_ORG, year, month))
                     
-        shutil.copy(f, '{}\\{}\\{}'.format(PATH_ORG, year, month))
+        shutil.copy(f, '{}\\{}\\{}'.format(PATH_ORG, year, month))        
 
 
 if __name__ == "__main__":
