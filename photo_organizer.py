@@ -6,6 +6,28 @@ import argparse
 from progressbar import ProgressBar
 
 
+def organize(f, path_org, extensions):
+    try:     
+        ex = f[f.index('.'):].lower()
+        if ex not in extensions:
+            return
+        
+        date_time = Image.open(f)._getexif()[36867]
+        year = date_time.split(' ')[0].split(':')[0]
+        month = date_time.split(' ')[0].split(':')[1]        
+    except Exception:
+        print('Error trying to get exif date: {}. Getting creation date file instead.'.format(f))        
+        date_time = datetime.fromtimestamp(os.path.getctime(f))
+        year = date_time.year
+        month = date_time.month
+    
+    if not os.path.isdir('{}\\{}'.format(path_org, year)):
+        os.mkdir('{}\\{}'.format(path_org, year))
+    if not os.path.isdir('{}\\{}\\{}'.format(path_org, year, month)):
+        os.mkdir('{}\\{}\\{}'.format(path_org, year, month))
+                
+    shutil.copy(f, '{}\\{}\\{}'.format(path_org, year, month))
+
 def main(args):
     PATH = args.image_folder
     PATH_ORG = PATH + '\\organized'
@@ -25,26 +47,7 @@ def main(args):
     pb = ProgressBar(len(files))
     for f in files:
         pb.next()
-        try:     
-            ex = f[f.index('.'):].lower()
-            if ex not in EXTENSIONS:
-                continue
-            
-            date_time = Image.open(f)._getexif()[36867]
-            year = date_time.split(' ')[0].split(':')[0]
-            month = date_time.split(' ')[0].split(':')[1]        
-        except Exception:
-            print('Error trying to get exif date: {}. Getting creation date file instead.'.format(f))        
-            date_time = datetime.fromtimestamp(os.path.getctime(f))
-            year = date_time.year
-            month = date_time.month
-        
-        if not os.path.isdir('{}\\{}'.format(PATH_ORG, year)):
-            os.mkdir('{}\\{}'.format(PATH_ORG, year))
-        if not os.path.isdir('{}\\{}\\{}'.format(PATH_ORG, year, month)):
-            os.mkdir('{}\\{}\\{}'.format(PATH_ORG, year, month))
-                    
-        shutil.copy(f, '{}\\{}\\{}'.format(PATH_ORG, year, month))        
+        organize(f, PATH_ORG, EXTENSIONS)
 
 
 if __name__ == "__main__":
