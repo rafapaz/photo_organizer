@@ -16,7 +16,7 @@ def organize(f, path_org, extensions):
         year = date_time.split(' ')[0].split(':')[0]
         month = date_time.split(' ')[0].split(':')[1]        
     except Exception:
-        print('Error trying to get exif date: {}. Getting creation date file instead.'.format(f))        
+        print('Warning: canot get exif date: {}. Getting creation date file instead.'.format(f))        
         date_time = datetime.fromtimestamp(os.path.getctime(f))
         year = date_time.year
         month = date_time.month
