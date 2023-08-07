@@ -5,10 +5,15 @@ from PIL import Image
 import argparse
 from progressbar import ProgressBar
 
+SLASH = '/'
+
+if os.name != 'posix':
+    SLASH = '\\'
+
 
 def main(args):
     PATH = args.image_folder    
-    PATH_RESIZED = PATH + '\\resized'
+    PATH_RESIZED = PATH + '{}resized'.format(SLASH)
     MAXWIDTH = args.new_width
     EXTENSIONS = ['.jpg', '.jpeg', '.tif', '.tiff', '.bmp', '.png', '.gif']
 
@@ -39,10 +44,11 @@ def main(args):
             height = img.size[1]
             ratio = (MAXWIDTH/float(width))
             hsize = int((float(height)*float(ratio)))
-            img = img.resize((MAXWIDTH,hsize), Image.ANTIALIAS)            
+            img = img.resize((MAXWIDTH,hsize))            
             img.save(f)
-        except Exception:
+        except Exception as ex:
             print('Error trying to resize image {}.'.format(f))        
+            print(repr(ex))
         
 
 if __name__ == "__main__":

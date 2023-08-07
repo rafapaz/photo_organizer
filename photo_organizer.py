@@ -5,6 +5,11 @@ from PIL import Image
 import argparse
 from progressbar import ProgressBar
 
+SLASH = '/'
+
+if os.name != 'posix':
+    SLASH = '\\'
+
 
 def organize(f, path_org, extensions):
     try:     
@@ -21,16 +26,16 @@ def organize(f, path_org, extensions):
         year = date_time.year
         month = date_time.month
     
-    if not os.path.isdir('{}\\{}'.format(path_org, year)):
-        os.mkdir('{}\\{}'.format(path_org, year))
-    if not os.path.isdir('{}\\{}\\{}'.format(path_org, year, month)):
-        os.mkdir('{}\\{}\\{}'.format(path_org, year, month))
+    if not os.path.isdir('{}{}{}'.format(path_org, SLASH, year)):
+        os.mkdir('{}{}{}'.format(path_org, SLASH, year))
+    if not os.path.isdir('{}{}{}{}{}'.format(path_org, SLASH, year, SLASH, month)):
+        os.mkdir('{}{}{}{}{}'.format(path_org, SLASH, year, SLASH, month))
                 
-    shutil.copy(f, '{}\\{}\\{}'.format(path_org, year, month))
+    shutil.copy(f, '{}{}{}{}{}'.format(path_org, SLASH, year, SLASH, month))
 
 def main(args):
     PATH = args.image_folder
-    PATH_ORG = PATH + '\\organized'
+    PATH_ORG = PATH + '{}organized'.format(SLASH)
     EXTENSIONS = ['.jpg', '.jpeg', '.tif', '.tiff', '.bmp', '.png', '.gif']
 
     if os.path.isdir(PATH_ORG):
